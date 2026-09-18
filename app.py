@@ -29,7 +29,10 @@ def shell(name, title, subtitle, style):
     h1,h2,h3,p,label,[data-testid="stMarkdownContainer"], [data-testid="stMetricValue"], [data-testid="stMetricLabel"] {{color:{INK};}}
     h1 {{font-size:2.55rem!important;letter-spacing:-.055em;line-height:1.12!important;font-weight:650!important;}}
     h2,h3 {{letter-spacing:-.025em;}}
+    [data-testid="stCaptionContainer"] {{opacity:1!important;}}
     [data-testid="stCaptionContainer"] p {{color:{MUTED}!important;}}
+    [data-tag] {{background:{ACCENT}25!important;color:{INK}!important;border:1px solid {ACCENT}50;}}
+    [data-tag] span,[data-tag] button {{color:{INK}!important;}}
     [data-testid="stMetric"] {{background:{PANEL};border:1px solid {MUTED}30;border-top:2px solid {ACCENT};border-radius:{RADIUS}px;padding:18px 20px;}}
     [data-testid="stMetricValue"] {{font-variant-numeric:tabular-nums;font-size:1.8rem;}}
     [data-testid="stPlotlyChart"] {{background:{PANEL};border:1px solid {MUTED}30;border-radius:{RADIUS}px;overflow:hidden;}}
@@ -51,6 +54,10 @@ def shell(name, title, subtitle, style):
     st.sidebar.caption('Fictional data. Explore the workflow; no external systems are connected.')
 
 def chart(fig, height=340):
+    for axis in [fig.layout.xaxis,fig.layout.yaxis]:
+        if axis.title.text:axis.title.text=axis.title.text.replace('_',' ').title()
+    for trace in fig.data:
+        if trace.name:trace.name=trace.name.replace('_',' ').title()
     fig.update_layout(template='plotly_white',paper_bgcolor=PANEL,plot_bgcolor=PANEL,font=dict(color=INK,size=12),colorway=PALETTE,height=height,margin=dict(l=55,r=25,t=55,b=55),legend=dict(orientation='h',y=-.24,x=0),hoverlabel=dict(bgcolor=PANEL,font_color=INK))
     fig.update_xaxes(automargin=True,gridcolor='rgba(128,145,155,.14)',zerolinecolor='rgba(128,145,155,.3)')
     fig.update_yaxes(automargin=True,gridcolor='rgba(128,145,155,.14)',zerolinecolor='rgba(128,145,155,.3)')
